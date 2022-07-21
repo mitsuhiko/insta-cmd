@@ -1,0 +1,13 @@
+---
+source: src/lib.rs
+info:
+  program: cat
+  args: []
+  stdin: Hello World!
+---
+success: true
+exit_code: 0
+----- stdout -----
+Hello World!
+----- stderr -----
+

@@ -1,0 +1,12 @@
+---
+source: src/lib.rs
+info:
+  program: "false"
+  args: []
+---
+success: false
+exit_code: 1
+----- stdout -----
+
+----- stderr -----
+
