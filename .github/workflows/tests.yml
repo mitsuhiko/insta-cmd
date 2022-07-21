@@ -18,14 +18,14 @@ jobs:
         run: make test
 
   test-stable:
-    name: Test on 1.56.1
+    name: Test on 1.57.0
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.56.1
+          toolchain: 1.57.0
           profile: minimal
           override: true
       - name: Test

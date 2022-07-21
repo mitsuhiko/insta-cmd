@@ -5,7 +5,7 @@
 [![Build Status](https://github.com/mitsuhiko/insta-cmd/workflows/Tests/badge.svg?branch=main)](https://github.com/mitsuhiko/insta-cmd/actions?query=workflow%3ATests)
 [![Crates.io](https://img.shields.io/crates/d/insta-cmd.svg)](https://crates.io/crates/insta-cmd)
 [![License](https://img.shields.io/github/license/mitsuhiko/insta-cmd)](https://github.com/mitsuhiko/insta-cmd/blob/main/LICENSE)
-[![rustc 1.56.1](https://img.shields.io/badge/rust-1.56.1%2B-orange.svg)](https://img.shields.io/badge/rust-1.56.1%2B-orange.svg)
+[![rustc 1.56.1](https://img.shields.io/badge/rust-1.57.0%2B-orange.svg)](https://img.shields.io/badge/rust-1.57.0%2B-orange.svg)
 [![Documentation](https://docs.rs/insta-cmd/badge.svg)](https://docs.rs/insta-cmd)
 
 ## Introduction
