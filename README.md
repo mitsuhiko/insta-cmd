@@ -12,6 +12,13 @@
 
 This is an experimental extension to insta for command line app testing.
 
+```rust
+use std::process::Command;
+use insta_cmd::assert_cmd_snapshot;
+
+assert_cmd_snapshot!(Command::new("echo").arg("Hello World!"));
+```
+
 ## License and Links
 
 - [Project Website](https://insta.rs/)
