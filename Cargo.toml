@@ -2,9 +2,14 @@
 name = "insta-cmd"
 version = "0.1.0"
 edition = "2021"
+license = "Apache-2.0"
+authors = ["Armin Ronacher <armin.ronacher@active-4.com>"]
+description = "A command line extension to the insta testing library for Rust"
 rust-version = "1.56.1"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+homepage = "https://insta.rs/"
+repository = "https://github.com/mitsuhiko/insta-cmd"
+keywords = ["snapshot", "cmd", "trycmd", "assert-cmd"]
+readme = "README.md"
 
 [dependencies]
 insta = { version = "1.16.0", path = "../insta" }

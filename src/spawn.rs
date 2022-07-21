@@ -51,6 +51,7 @@ impl Info {
     }
 }
 
+/// Implemented by different types that can be spawned and snapshotted.
 pub trait Spawn {
     #[doc(hidden)]
     fn spawn_with_info(&mut self) -> (Info, Output);
@@ -70,12 +71,14 @@ impl<'a> Spawn for &'a mut Command {
     }
 }
 
+/// Like [`Command`] but sends some input to stdin.
 pub struct StdinCommand {
     command: Command,
     stdin: Vec<u8>,
 }
 
 impl StdinCommand {
+    /// Creates a new command that also gets some input value fed to stdin.
     pub fn new<S: AsRef<OsStr>, I: Into<Vec<u8>>>(program: S, stdin: I) -> StdinCommand {
         let mut command = Command::new(program);
         command.stdin(Stdio::piped());
