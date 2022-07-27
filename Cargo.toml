@@ -1,6 +1,6 @@
 [package]
 name = "insta-cmd"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 license = "Apache-2.0"
 authors = ["Armin Ronacher <armin.ronacher@active-4.com>"]
@@ -12,6 +12,6 @@ keywords = ["snapshot", "cmd", "trycmd", "assert-cmd"]
 readme = "README.md"
 
 [dependencies]
-insta = { version = "1.16.0" }
+insta = { version = "1.17.0" }
 serde = { version = "1.0.139", features = ["derive"] }
 serde_json = "1.0.82"
