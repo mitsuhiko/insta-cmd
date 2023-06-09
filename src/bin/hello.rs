@@ -2,6 +2,7 @@ fn main() {
     println!("Hello Bin!");
 }
 
+/// Requires running `cargo build` before running this test.
 #[test]
 fn test_cli() {
     use insta_cmd::{assert_cmd_snapshot, get_cargo_bin, Command};
