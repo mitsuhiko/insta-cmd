@@ -65,7 +65,7 @@ fn find_exe(name: &str) -> PathBuf {
 /// Helper function to return the path to an executable that cargo is building.
 pub fn get_cargo_bin(name: &str) -> PathBuf {
     let env_var = format!("CARGO_BIN_EXE_{}", name);
-    env::var_os(&env_var)
+    env::var_os(env_var)
         .map(|p| p.into())
         .unwrap_or_else(|| find_exe(&format!("{}{}", name, env::consts::EXE_SUFFIX)))
 }
