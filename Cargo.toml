@@ -1,17 +1,17 @@
 [package]
-name = "insta-cmd"
-version = "0.2.0"
-edition = "2021"
-license = "Apache-2.0"
 authors = ["Armin Ronacher <armin.ronacher@active-4.com>"]
 description = "A command line extension to the insta testing library for Rust"
-rust-version = "1.57.0"
+edition = "2021"
 homepage = "https://insta.rs/"
-repository = "https://github.com/mitsuhiko/insta-cmd"
 keywords = ["snapshot", "cmd", "trycmd", "assert-cmd"]
+license = "Apache-2.0"
+name = "insta-cmd"
 readme = "README.md"
+repository = "https://github.com/mitsuhiko/insta-cmd"
+rust-version = "1.57.0"
+version = "0.2.0"
 
 [dependencies]
-insta = { version = "1.17.0" }
-serde = { version = "1.0.139", features = ["derive"] }
+insta = {version = "1.29.0", features = ["serde"]}
+serde = {version = "1.0.139", features = ["derive"]}
 serde_json = "1.0.82"
