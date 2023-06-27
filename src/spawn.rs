@@ -30,7 +30,7 @@ fn describe_program(cmd: &OsStr) -> String {
 }
 
 impl Info {
-    fn from_std_command(cmd: &Command) -> Info {
+    fn from_std_command(cmd: &Command, stdin: Option<&[u8]>) -> Info {
         Info {
             program: describe_program(cmd.get_program()),
             args: cmd
@@ -46,7 +46,7 @@ impl Info {
                     )
                 })
                 .collect(),
-            stdin: None,
+            stdin: stdin.as_ref().map(|x| String::from_utf8_lossy(&x).into()),
         }
     }
 }
@@ -54,20 +54,61 @@ impl Info {
 /// Implemented by different types that can be spawned and snapshotted.
 pub trait Spawn {
     #[doc(hidden)]
-    fn spawn_with_info(&mut self) -> (Info, Output);
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output);
+}
+
+/// Utility methods for spawning.
+pub trait SpawnExt {
+    /// This passes the given input to stdin before spawning the command.
+    fn pass_stdin(&mut self, stdin: impl Into<Vec<u8>>) -> SpawnWithStdin<'_>;
+}
+
+impl<T: Spawn> SpawnExt for T {
+    fn pass_stdin(&mut self, stdin: impl Into<Vec<u8>>) -> SpawnWithStdin<'_> {
+        SpawnWithStdin {
+            spawn: self,
+            stdin: stdin.into(),
+        }
+    }
+}
+
+pub struct SpawnWithStdin<'a> {
+    spawn: &'a mut dyn Spawn,
+    stdin: Vec<u8>,
+}
+
+impl<'a> Spawn for SpawnWithStdin<'a> {
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
+        self.spawn
+            .spawn_with_info(Some(stdin.unwrap_or(mem::take(&mut self.stdin))))
+    }
 }
 
 impl Spawn for Command {
-    fn spawn_with_info(&mut self) -> (Info, Output) {
-        let info = Info::from_std_command(self);
-        let output = self.output().unwrap();
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
+        let info = Info::from_std_command(self, stdin.as_deref());
+        let output = if let Some(stdin) = stdin {
+            self.stdin(Stdio::piped());
+            self.stdout(Stdio::piped());
+            self.stderr(Stdio::piped());
+            let mut child = self.spawn().unwrap();
+            let mut child_stdin = child.stdin.take().expect("Failed to open stdin");
+            std::thread::spawn(move || {
+                child_stdin
+                    .write_all(&stdin)
+                    .expect("Failed to write to stdin");
+            });
+            child.wait_with_output().unwrap()
+        } else {
+            self.output().unwrap()
+        };
         (info, output)
     }
 }
 
 impl<'a> Spawn for &'a mut Command {
-    fn spawn_with_info(&mut self) -> (Info, Output) {
-        <Command as Spawn>::spawn_with_info(self)
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
+        <Command as Spawn>::spawn_with_info(self, stdin)
     }
 }
 
@@ -106,40 +147,32 @@ impl DerefMut for StdinCommand {
 }
 
 impl Spawn for StdinCommand {
-    fn spawn_with_info(&mut self) -> (Info, Output) {
-        let mut info = Info::from_std_command(&self.command);
-        let mut child = self.command.spawn().unwrap();
-        let mut stdin = child.stdin.take().expect("Failed to open stdin");
-        let to_write = mem::take(&mut self.stdin);
-        info.stdin = Some(String::from_utf8_lossy(&to_write).into());
-        std::thread::spawn(move || {
-            stdin
-                .write_all(&to_write)
-                .expect("Failed to write to stdin");
-        });
-        let output = child.wait_with_output().unwrap();
-        (info, output)
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
+        Command::spawn_with_info(
+            &mut self.command,
+            Some(stdin.unwrap_or(mem::take(&mut self.stdin))),
+        )
     }
 }
 
 impl<'a, T: AsRef<OsStr>> Spawn for &'a [T] {
-    fn spawn_with_info(&mut self) -> (Info, Output) {
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
         let mut cmd = Command::new(self.get(0).expect("expected program name as first item"));
         for arg in &self[1..] {
             cmd.arg(arg);
         }
-        cmd.spawn_with_info()
+        cmd.spawn_with_info(stdin)
     }
 }
 
 impl<T: AsRef<OsStr>, const N: usize> Spawn for [T; N] {
-    fn spawn_with_info(&mut self) -> (Info, Output) {
-        (&self[..]).spawn_with_info()
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
+        (&self[..]).spawn_with_info(stdin)
     }
 }
 
 impl<T: AsRef<OsStr>> Spawn for Vec<T> {
-    fn spawn_with_info(&mut self) -> (Info, Output) {
-        (&self[..]).spawn_with_info()
+    fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
+        (&self[..]).spawn_with_info(stdin)
     }
 }

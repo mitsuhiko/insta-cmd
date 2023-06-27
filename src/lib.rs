@@ -26,6 +26,19 @@
 //!
 //! assert_cmd_snapshot!(Command::new(get_cargo_bin("hello")).arg("first arg"));
 //! ```
+//!
+//! ## Passing Stdin
+//!
+//! To pass data via stdin and to have it snapshotted alongside, use the
+//! [`pass_stdin`](SpawnExt::pass_stdin) extension method.  Inside the macro
+//! it's automatically in scope.
+//!
+//! ```no_run
+//! use std::process::Command;
+//! use insta_cmd::assert_cmd_snapshot;
+//!
+//! assert_cmd_snapshot!(Command::new("cat").arg("-b").pass_stdin("Hello World"));
+//! ```
 #[doc(hidden)]
 #[macro_use]
 mod macros;
@@ -34,7 +47,10 @@ mod cargo;
 mod spawn;
 
 pub use crate::cargo::{get_cargo_bin, get_cargo_example};
-pub use crate::spawn::{Spawn, StdinCommand};
+pub use crate::spawn::{Spawn, SpawnExt};
+
+#[deprecated = "Use .pass_stdin(...) instead"]
+pub use crate::spawn::StdinCommand;
 
 pub use std::process::Command;
 
@@ -55,8 +71,19 @@ fn test_command() {
 }
 
 #[test]
+#[allow(deprecated)]
 fn test_stdin() {
     assert_cmd_snapshot!(StdinCommand::new("cat", "Hello World!"));
+}
+
+#[test]
+fn test_pass_stdin() {
+    assert_cmd_snapshot!(Command::new("cat").pass_stdin("Hello World!"));
+}
+
+#[test]
+fn test_pass_stdin_on_array() {
+    assert_cmd_snapshot!(["cat"].pass_stdin("Hello World!"));
 }
 
 #[test]

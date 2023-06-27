@@ -2,7 +2,7 @@
 #[doc(hidden)]
 macro_rules! _run_and_snapshot {
     ($cmd:expr, $body:expr) => {{
-        let (info, output) = $crate::_macro_support::Spawn::spawn_with_info(&mut $cmd);
+        let (info, output) = $crate::_macro_support::Spawn::spawn_with_info(&mut $cmd, None);
         let mut settings = $crate::_macro_support::insta::Settings::clone_current();
         settings.set_info(&info);
         settings.set_omit_expression(true);
@@ -23,16 +23,22 @@ macro_rules! _run_and_snapshot {
 #[macro_export]
 macro_rules! assert_cmd_snapshot {
     ($spawnable:expr, @$snapshot:literal) => {{
+        #[allow(unused)]
+        use $crate::SpawnExt;
         $crate::_run_and_snapshot!($spawnable, |snapshot: &str| {
             $crate::_macro_support::insta::assert_snapshot!(snapshot, @$snapshot);
         });
     }};
     ($name:expr, $spawnable:expr) => {{
+        #[allow(unused)]
+        use $crate::SpawnExt;
         $crate::_run_and_snapshot!($spawnable, |snapshot: &str| {
             $crate::_macro_support::insta::assert_snapshot!($name, snapshot);
         });
     }};
     ($spawnable:expr) => {{
+        #[allow(unused)]
+        use $crate::SpawnExt;
         $crate::_run_and_snapshot!($spawnable, |snapshot: &str| {
             $crate::_macro_support::insta::assert_snapshot!(snapshot);
         });
