@@ -49,7 +49,7 @@ mod spawn;
 pub use crate::cargo::{get_cargo_bin, get_cargo_example};
 pub use crate::spawn::{Spawn, SpawnExt};
 
-#[deprecated = "Use .pass_stdin(...) instead"]
+#[allow(deprecated)]
 pub use crate::spawn::StdinCommand;
 
 pub use std::process::Command;

@@ -113,11 +113,13 @@ impl<'a> Spawn for &'a mut Command {
 }
 
 /// Like [`Command`] but sends some input to stdin.
+#[deprecated = "Use .pass_stdin(...) instead"]
 pub struct StdinCommand {
     command: Command,
     stdin: Vec<u8>,
 }
 
+#[allow(deprecated)]
 impl StdinCommand {
     /// Creates a new command that also gets some input value fed to stdin.
     pub fn new<S: AsRef<OsStr>, I: Into<Vec<u8>>>(program: S, stdin: I) -> StdinCommand {
@@ -132,6 +134,7 @@ impl StdinCommand {
     }
 }
 
+#[allow(deprecated)]
 impl Deref for StdinCommand {
     type Target = Command;
 
@@ -140,12 +143,14 @@ impl Deref for StdinCommand {
     }
 }
 
+#[allow(deprecated)]
 impl DerefMut for StdinCommand {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.command
     }
 }
 
+#[allow(deprecated)]
 impl Spawn for StdinCommand {
     fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
         Command::spawn_with_info(
