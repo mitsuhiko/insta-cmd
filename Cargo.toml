@@ -9,9 +9,9 @@ name = "insta-cmd"
 readme = "README.md"
 repository = "https://github.com/mitsuhiko/insta-cmd"
 rust-version = "1.57.0"
-version = "0.3.0"
+version = "0.4.0"
 
 [dependencies]
-insta = {version = "1.29.0", features = ["serde"]}
-serde = {version = "1.0.139", features = ["derive"]}
+insta = { version = "1.29.0", features = ["serde"] }
+serde = { version = "1.0.139", features = ["derive"] }
 serde_json = "1.0.82"

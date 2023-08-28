@@ -46,7 +46,7 @@ impl Info {
                     )
                 })
                 .collect(),
-            stdin: stdin.as_ref().map(|x| String::from_utf8_lossy(&x).into()),
+            stdin: stdin.as_ref().map(|x| String::from_utf8_lossy(x).into()),
         }
     }
 }
