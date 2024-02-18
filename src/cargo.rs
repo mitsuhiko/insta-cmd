@@ -14,7 +14,6 @@ fn primary_target_dir() -> PathBuf {
     if let Some(target_dir) = env::var_os("CARGO_TARGET_DIR") {
         let target_dir = PathBuf::from(target_dir);
         if target_dir.is_dir() {
-            println!("first out");
             return target_dir;
         };
     }
