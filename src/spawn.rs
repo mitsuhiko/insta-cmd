@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::env;
 use std::ffi::OsStr;
 use std::io::Write;
@@ -13,8 +13,8 @@ use serde::Serialize;
 pub struct Info {
     program: String,
     args: Vec<String>,
-    #[serde(skip_serializing_if = "HashMap::is_empty")]
-    env: HashMap<String, String>,
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    env: BTreeMap<String, String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     stdin: Option<String>,
 }

@@ -1,0 +1,17 @@
+---
+source: src/lib.rs
+info:
+  program: echo
+  args:
+    - Just some stuff
+  env:
+    A: B
+    K: V
+    Y: Z
+---
+success: true
+exit_code: 0
+----- stdout -----
+Just some stuff
+
+----- stderr -----
