@@ -71,6 +71,15 @@ fn test_command() {
 }
 
 #[test]
+fn test_env() {
+    assert_cmd_snapshot!(Command::new("echo")
+        .arg("Just some stuff")
+        .env("K", "V")
+        .env("A", "B")
+        .env("Y", "Z"));
+}
+
+#[test]
 #[allow(deprecated)]
 fn test_stdin() {
     assert_cmd_snapshot!(StdinCommand::new("cat", "Hello World!"));
