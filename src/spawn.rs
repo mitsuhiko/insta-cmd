@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::env;
 use std::ffi::OsStr;
 use std::io::Write;
@@ -7,29 +7,16 @@ use std::ops::{Deref, DerefMut};
 use std::path::Path;
 use std::process::{Command, Output, Stdio};
 
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct Info {
     program: String,
     args: Vec<String>,
-    #[serde(skip_serializing_if = "HashMap::is_empty")]
-    #[serde(serialize_with = "ordered_map")]
-    env: HashMap<String, String>,
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    env: BTreeMap<String, String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     stdin: Option<String>,
-}
-
-/// For use with serde's [serialize_with] attribute
-fn ordered_map<S, K: Ord + Serialize, V: Serialize>(
-    value: &HashMap<K, V>,
-    serializer: S,
-) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let ordered: BTreeMap<_, _> = value.iter().collect();
-    ordered.serialize(serializer)
 }
 
 fn describe_program(cmd: &OsStr) -> String {
