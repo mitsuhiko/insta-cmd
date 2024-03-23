@@ -162,7 +162,7 @@ impl Spawn for StdinCommand {
 
 impl<'a, T: AsRef<OsStr>> Spawn for &'a [T] {
     fn spawn_with_info(&mut self, stdin: Option<Vec<u8>>) -> (Info, Output) {
-        let mut cmd = Command::new(self.get(0).expect("expected program name as first item"));
+        let mut cmd = Command::new(self.first().expect("expected program name as first item"));
         for arg in &self[1..] {
             cmd.arg(arg);
         }
