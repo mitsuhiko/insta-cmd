@@ -22,21 +22,21 @@ macro_rules! _run_and_snapshot {
 /// Runs an [spawnable](crate::Spawn) and snapshots the output.
 #[macro_export]
 macro_rules! assert_cmd_snapshot {
-    ($spawnable:expr, @$snapshot:literal) => {{
+    ($spawnable:expr, @$snapshot:literal $(,)?) => {{
         #[allow(unused)]
         use $crate::SpawnExt;
         $crate::_run_and_snapshot!($spawnable, |snapshot: &str| {
             $crate::_macro_support::insta::assert_snapshot!(snapshot, @$snapshot);
         });
     }};
-    ($name:expr, $spawnable:expr) => {{
+    ($name:expr, $spawnable:expr $(,)?) => {{
         #[allow(unused)]
         use $crate::SpawnExt;
         $crate::_run_and_snapshot!($spawnable, |snapshot: &str| {
             $crate::_macro_support::insta::assert_snapshot!($name, snapshot);
         });
     }};
-    ($spawnable:expr) => {{
+    ($spawnable:expr $(,)?) => {{
         #[allow(unused)]
         use $crate::SpawnExt;
         $crate::_run_and_snapshot!($spawnable, |snapshot: &str| {
