@@ -90,3 +90,30 @@ fn test_pass_stdin_on_array() {
 fn test_failure() {
     assert_cmd_snapshot!(["false"]);
 }
+
+#[test]
+fn test_trailing_comma_one_arg() {
+    assert_cmd_snapshot!(["echo", "42"],);
+}
+
+#[test]
+fn test_trailing_comma_named_snapshot() {
+    assert_cmd_snapshot!(
+        "named_snapshot_with_trailing_comma",
+        Command::new("echo").arg("27"),
+    );
+}
+
+#[test]
+fn test_trailing_comma_inline_snapshot() {
+    assert_cmd_snapshot!(
+        Command::new("true"),
+        @r###"
+            success: true
+            exit_code: 0
+            ----- stdout -----
+
+            ----- stderr -----
+        "###,
+    );
+}

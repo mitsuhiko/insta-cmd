@@ -1,0 +1,13 @@
+---
+source: src/lib.rs
+info:
+  program: echo
+  args:
+    - "42"
+---
+success: true
+exit_code: 0
+----- stdout -----
+42
+
+----- stderr -----
