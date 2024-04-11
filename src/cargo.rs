@@ -9,10 +9,19 @@ struct MetaData {
     target_directory: PathBuf,
 }
 
+fn add_profile_dir(mut target_dir: PathBuf) -> PathBuf {
+    if cfg!(debug_assertions) {
+        target_dir.push("debug");
+    } else {
+        target_dir.push("release");
+    }
+    target_dir
+}
+
 fn primary_target_dir() -> PathBuf {
     // the target dir is explicitly set and exists
     if let Some(target_dir) = env::var_os("CARGO_TARGET_DIR") {
-        let target_dir = PathBuf::from(target_dir);
+        let target_dir = add_profile_dir(PathBuf::from(target_dir));
         if target_dir.is_dir() {
             return target_dir;
         };
@@ -37,13 +46,7 @@ fn cargo_inferred_target_dir() -> PathBuf {
         .output()
         .unwrap();
     let meta: MetaData = serde_json::from_slice(&metadata.stdout).unwrap();
-    let mut rv = meta.target_directory;
-    if cfg!(debug_assertions) {
-        rv.push("debug");
-    } else {
-        rv.push("release");
-    }
-    rv
+    add_profile_dir(meta.target_directory)
 }
 
 fn find_exe(name: &str) -> PathBuf {
