@@ -88,9 +88,7 @@ fn cat_test_helper() -> Command {
     }
     #[cfg(unix)]
     {
-        let mut rv = Command::new("cat");
-        rv.arg(msg);
-        rv
+        Command::new("cat")
     }
 }
 
