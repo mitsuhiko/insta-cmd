@@ -60,6 +60,41 @@ pub mod _macro_support {
     pub use insta;
 }
 
+#[cfg(test)]
+fn echo_test_helper(msg: &str) -> Command {
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        let mut rv = Command::new("cmd.exe");
+        rv.arg("/c").arg("echo").raw_arg(msg);
+        rv
+    }
+    #[cfg(unix)]
+    {
+        let mut rv = Command::new("echo");
+        rv.arg(msg);
+        rv
+    }
+}
+
+#[cfg(test)]
+fn cat_test_helper() -> Command {
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        let mut rv = Command::new("cmd.exe");
+        rv.arg("/c").arg("find").arg("/v").raw_arg("\"\"");
+        rv
+    }
+    #[cfg(unix)]
+    {
+        let mut rv = Command::new("cat");
+        rv.arg(msg);
+        rv
+    }
+}
+
+#[cfg(unix)]
 #[test]
 fn test_basic() {
     assert_cmd_snapshot!(["/bin/echo", "Hello World"]);
@@ -67,18 +102,18 @@ fn test_basic() {
 
 #[test]
 fn test_command() {
-    assert_cmd_snapshot!(Command::new("echo").arg("Just some stuff"));
+    assert_cmd_snapshot!(echo_test_helper("Just some stuff"));
 }
 
 #[test]
 fn test_env() {
-    assert_cmd_snapshot!(Command::new("echo")
-        .arg("Just some stuff")
+    assert_cmd_snapshot!(echo_test_helper("Just some stuff")
         .env("K", "V")
         .env("A", "B")
         .env("Y", "Z"));
 }
 
+#[cfg(unix)]
 #[test]
 #[allow(deprecated)]
 fn test_stdin() {
@@ -87,19 +122,22 @@ fn test_stdin() {
 
 #[test]
 fn test_pass_stdin() {
-    assert_cmd_snapshot!(Command::new("cat").pass_stdin("Hello World!"));
+    assert_cmd_snapshot!(cat_test_helper().pass_stdin("Hello World!\n"));
 }
 
+#[cfg(unix)]
 #[test]
 fn test_pass_stdin_on_array() {
     assert_cmd_snapshot!(["cat"].pass_stdin("Hello World!"));
 }
 
+#[cfg(unix)]
 #[test]
 fn test_failure() {
     assert_cmd_snapshot!(["false"]);
 }
 
+#[cfg(unix)]
 #[test]
 fn test_trailing_comma_one_arg() {
     assert_cmd_snapshot!(["echo", "42"],);
@@ -107,12 +145,10 @@ fn test_trailing_comma_one_arg() {
 
 #[test]
 fn test_trailing_comma_named_snapshot() {
-    assert_cmd_snapshot!(
-        "named_snapshot_with_trailing_comma",
-        Command::new("echo").arg("27"),
-    );
+    assert_cmd_snapshot!("named_snapshot_with_trailing_comma", echo_test_helper("27"),);
 }
 
+#[cfg(unix)]
 #[test]
 fn test_trailing_comma_inline_snapshot() {
     assert_cmd_snapshot!(

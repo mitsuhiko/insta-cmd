@@ -1,13 +1,18 @@
 ---
 source: src/lib.rs
 info:
-  program: cat
-  args: []
-  stdin: Hello World!
+  program: cmd
+  args:
+    - /c
+    - find
+    - /v
+    - "\"\""
+  stdin: "Hello World!\n"
 ---
 success: true
 exit_code: 0
 ----- stdout -----
 Hello World!
+
 ----- stderr -----
 
