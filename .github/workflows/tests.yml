@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test-latest:
-    name: Test on Latest
+    name: Test on Latest Linux
     runs-on: ubuntu-latest
 
     steps:
@@ -17,8 +17,22 @@ jobs:
       - name: Test
         run: make test
 
+  test-latest-windows:
+    name: Test on Latest Windows
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+      - name: Test
+        run: make test
+
   test-stable:
-    name: Test on 1.57.0
+    name: Test on 1.57.0 Linux
     runs-on: ubuntu-latest
 
     steps:
