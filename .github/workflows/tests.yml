@@ -2,6 +2,11 @@ name: Tests
 
 on: [push, pull_request]
 
+env:
+  CARGO_TERM_COLOR: always
+  CLICOLOR_FORCE: 1
+  RUSTDOCFLAGS: "-Dwarnings"
+
 jobs:
   test-latest:
     name: Test on Latest Linux
@@ -44,3 +49,15 @@ jobs:
           override: true
       - name: Test
         run: make test
+
+  build-docs:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+      - name: doc
+        run: cargo doc --all-features
