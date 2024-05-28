@@ -1,6 +1,6 @@
 //! `insta-cmd` is an extension to [insta](https://insta.rs/) that lets you snapshot
 //! a command that produces (text) output to stdout and stderr.  It takes a
-//! [`Command`](std::process::Command) from the standard library, runs it and
+//! [`Command`] from the standard library, runs it and
 //! snapshots the output alongside the exit code.
 //!
 //! ```no_run
