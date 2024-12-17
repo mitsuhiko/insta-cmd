@@ -14,9 +14,10 @@
 //!
 //! If you want to test binaries from your own project you can use the
 //! [`get_cargo_bin`] and [`get_cargo_example`] functions to retrieve the path to
-//! your binary.  Note that it's unlikely that cargo will have built the binary
-//! under normal circumstances so you will have to run ``cargo build --bin my-bin``
-//! or ``cargo build --example my-example`` before.
+//! your binary. Cargo will automatically build binaries before running an
+//! [integration test](https://doc.rust-lang.org/cargo/reference/cargo-targets.html#integration-tests).
+//! You will have to run ``cargo build --bin my-bin`` or
+//! ``cargo build --example my-example`` before using `insta_cmd` in a unit test.
 //!
 //! Afterwards you can test it like this:
 //!
