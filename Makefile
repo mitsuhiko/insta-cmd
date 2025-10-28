@@ -25,4 +25,8 @@ lint:
 	@rustup component add clippy 2> /dev/null
 	@cargo clippy
 
-.PHONY: all doc test format format-check lint
+check-msrv:
+	@echo "MSRV CHECK"
+	@cargo msrv verify
+
+.PHONY: all doc test format format-check lint check-msrv

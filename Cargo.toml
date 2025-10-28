@@ -8,10 +8,12 @@ license = "Apache-2.0"
 name = "insta-cmd"
 readme = "README.md"
 repository = "https://github.com/mitsuhiko/insta-cmd"
-rust-version = "1.64.0"
+rust-version = "1.68.0"
 version = "0.6.0"
 
 [dependencies]
+# Cargo.lock is committed to ensure MSRV compatibility.
+# Dependencies are pinned in Cargo.lock to versions that work with rust-version.
 insta = { version = "1.29.0", features = ["serde"] }
 serde = { version = "1.0.139", features = ["derive"] }
 serde_json = "1.0.82"
