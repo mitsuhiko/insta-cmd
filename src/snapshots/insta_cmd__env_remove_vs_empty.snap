@@ -1,0 +1,16 @@
+---
+source: src/lib.rs
+info:
+  program: echo
+  args:
+    - Testing env
+  env:
+    EMPTY_VAR: ""
+    REMOVED_VAR: ""
+---
+success: true
+exit_code: 0
+----- stdout -----
+Testing env
+
+----- stderr -----
