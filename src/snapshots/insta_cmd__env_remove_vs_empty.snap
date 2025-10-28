@@ -6,7 +6,6 @@ info:
     - Testing env
   env:
     EMPTY_VAR: ""
-    REMOVED_VAR: ""
 ---
 success: true
 exit_code: 0

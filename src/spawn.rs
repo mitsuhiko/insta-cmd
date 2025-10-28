@@ -39,11 +39,13 @@ impl Info {
                 .collect(),
             env: cmd
                 .get_envs()
-                .map(|(k, v)| {
-                    (
-                        k.to_string_lossy().into_owned(),
-                        v.unwrap_or(OsStr::new("")).to_string_lossy().into_owned(),
-                    )
+                .filter_map(|(k, v)| {
+                    v.map(|val| {
+                        (
+                            k.to_string_lossy().into_owned(),
+                            val.to_string_lossy().into_owned(),
+                        )
+                    })
                 })
                 .collect(),
             stdin: stdin.as_ref().map(|x| String::from_utf8_lossy(x).into()),
