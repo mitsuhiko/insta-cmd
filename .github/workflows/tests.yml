@@ -32,14 +32,14 @@ jobs:
         run: make test
 
   test-stable:
-    name: Test on 1.57.0 Linux
+    name: Test on 1.64.0 Linux
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.57.0
+          toolchain: 1.64.0
           profile: minimal
           override: true
       - name: Test
