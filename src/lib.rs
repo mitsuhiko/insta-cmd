@@ -111,6 +111,13 @@ fn test_env() {
         .env("Y", "Z"));
 }
 
+#[test]
+fn test_env_remove_vs_empty() {
+    assert_cmd_snapshot!(echo_test_helper("Testing env")
+        .env("EMPTY_VAR", "")
+        .env_remove("REMOVED_VAR"));
+}
+
 #[cfg(unix)]
 #[test]
 #[allow(deprecated)]
