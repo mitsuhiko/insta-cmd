@@ -9,7 +9,7 @@ name = "insta-cmd"
 readme = "README.md"
 repository = "https://github.com/mitsuhiko/insta-cmd"
 rust-version = "1.68.0"
-version = "0.6.0"
+version = "0.7.0"
 
 [dependencies]
 # Cargo.lock is committed to ensure MSRV compatibility.
